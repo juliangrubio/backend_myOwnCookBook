@@ -6,14 +6,21 @@ const Recipe = db.define('Recipe', {
     type: DataTypes.INTEGER,
     primaryKey: true
   },
-  link: {
-    type: DataTypes.STRING
-  },
   title: {
     type: DataTypes.STRING
   },
+  preparation: {
+    type: DataTypes.TEXT
+  },
+  category: {
+    // type: DataTypes.STRING
+    type: DataTypes.ARRAY( DataTypes.STRING( 100 ) )
+  },
   tags: {
     type: DataTypes.STRING
+  },
+  isFromTheMealDB: {
+    type: DataTypes.BOOLEAN
   },
   state: {
     type: DataTypes.BOOLEAN

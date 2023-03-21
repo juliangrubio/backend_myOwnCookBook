@@ -4,7 +4,6 @@ import Recipe from '../models/recipe';
 
 export const getRecipes = async (req: Request, res: Response) => {
   const recetas = await Recipe.findAll();
-
   res.json({ recetas });
 };
 
@@ -25,25 +24,27 @@ export const getRecipe = async (req: Request, res: Response) => {
 export const postRecipe = async (req: Request, res: Response) => {
   const data: NewRecipeEntry = req.body;
 
+  console.log(data)
+
   try {
-    // const existeEmail = await Recipe.findOne({
-    //     where: {
-    //         email: body.email
-    //     }
-    // });
+    const existRecipe = await Recipe.findOne({
+        where: {
+            title: data.title
+        }
+    });
 
-    // if (existeEmail) {
-    //     return res.status(400).json({
-    //         msg: 'Ya existe un usuario con el email ' + body.email
-    //     });
-    // }
+    if (existRecipe) {
+        return res.status(400).json({
+            msj: 'Already exist the recipe called: ' + `<b>${data.title}</b>`
+            // msj: `<b>${data.title}</b>`
+        });
+    }
 
-    const recipe = await Recipe.create(data);
-
-    // const recipe = new Recipe(data);
-    // await recipe.save();
-
-    res.json(recipe);
+    const recipe = await Recipe.create({...data, state: true});
+    res.json({
+      ok: true,
+      recipe
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
